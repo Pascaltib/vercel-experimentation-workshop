@@ -9,6 +9,10 @@ import { formatUSD } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { ShoppingCart } from "lucide-react";
+import BuyNowButton from "@/components/buy-now";
+import { showBuyNowFlag } from "@/lib/flags";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default async function ProductDetailPage({
   params,
@@ -111,7 +115,9 @@ export default async function ProductDetailPage({
               </RadioGroup>
             </div>
             <div className="space-y-2">
-              <AddToCartButton productId={product.id} />
+            <Suspense fallback={<Skeleton />}>
+                <Purchase productId={product.id} />
+                </Suspense>
               <Link
                 href="/cart"
                 prefetch={true}
@@ -126,5 +132,15 @@ export default async function ProductDetailPage({
       </section>
       <RelatedProducts slug={product.slug} />
     </main>
+  );
+}
+
+async function Purchase({ productId }) {
+  const { enabled, text} = await showBuyNowFlag();
+  return (
+    <div className="flex space-x-2">
+      <AddToCartButton productId={productId} />
+      {enabled && <BuyNowButton text={text || "Buy Now"} />}
+    </div>
   );
 }
