@@ -115,9 +115,9 @@ export default async function ProductDetailPage({
               </RadioGroup>
             </div>
             <div className="space-y-2">
-            <Suspense fallback={<Skeleton />}>
+              <Suspense fallback={<Skeleton />}>
                 <Purchase productId={product.id} />
-                </Suspense>
+              </Suspense>
               <Link
                 href="/cart"
                 prefetch={true}
@@ -135,8 +135,8 @@ export default async function ProductDetailPage({
   );
 }
 
-async function Purchase({ productId }) {
-  const { enabled, text} = await showBuyNowFlag();
+async function Purchase({ productId }: { productId: string }) {
+  const { enabled, text } = await showBuyNowFlag();
   return (
     <div className="flex space-x-2">
       <AddToCartButton productId={productId} />
